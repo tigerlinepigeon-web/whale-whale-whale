@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鲸鱼碳汇计划 · 高一年级</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a1628; color: #e8f4f8; min-height: 100vh; }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, #0a1628 0%, #0d2847 100%);
+  }
+  .login-box {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 2.5rem; width: 340px; text-align: center;
+  }
+  .login-box h1 { font-size: 22px; font-weight: 500; color: #e8f4f8; margin-bottom: 6px; }
+  .login-box p { font-size: 13px; color: #7aa8c4; margin-bottom: 1.5rem; }
+  .login-box input, .login-box select {
+    width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08); color: #e8f4f8; font-size: 14px; margin-bottom: 10px; outline: none;
+  }
+  .login-box select option { background: #0d2847; color: #e8f4f8; }
+  .login-box button {
+    width: 100%; padding: 11px; border-radius: 8px; border: none;
+    background: #1D9E75; color: #fff; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 6px;
+  }
+  .login-box button:hover { background: #17835f; }
+
+  /* ── MAIN ── */
+  #main-screen { display: none; }
+  .top-bar {
+    background: rgba(10,22,40,0.95); border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 24px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .top-bar-left { font-size: 15px; font-weight: 500; color: #e8f4f8; }
+  .top-bar-right { font-size: 13px; color: #7aa8c4; }
+  .top-bar-right span { color: #1D9E75; font-weight: 500; }
+
+  .content { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+  /* ── STATS BAR ── */
+  .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+  .stat-card {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .stat-label { font-size: 11px; color: #7aa8c4; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-value { font-size: 22px; font-weight: 500; color: #e8f4f8; }
+  .stat-unit { font-size: 12px; color: #7aa8c4; margin-left: 2px; }
+  .stat-sub { font-size: 11px; color: #1D9E75; margin-top: 3px; }
+
+  /* ── OCEAN ── */
+  .section-title { font-size: 14px; font-weight: 500; color: #7aa8c4; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .ocean-container {
+    background: linear-gradient(180deg, #0d2847 0%, #0a4a6e 40%, #0d6e8f 100%);
+    border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);
+    padding: 24px; margin-bottom: 24px; position: relative; overflow: hidden; min-height: 320px;
+  }
+  .ocean-surface {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+    background: rgba(29,158,117,0.15); border-top: 1px solid rgba(29,158,117,0.3);
+  }
+  .whales-grid { display: flex; flex-wrap: wrap; gap: 20px; position: relative; z-index: 2; }
+  .whale-card {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 14px 16px; width: 160px; text-align: center;
+    transition: transform 0.2s, border-color 0.3s; cursor: default;
+  }
+  .whale-card.is-me { border-color: #1D9E75; background: rgba(29,158,117,0.12); }
+  .whale-card:hover { transform: translateY(-2px); }
+  .whale-svg { font-size: 48px; display: block; margin: 0 auto 8px; line-height: 1; transition: filter 0.5s; }
+  .whale-name { font-size: 13px; font-weight: 500; color: #e8f4f8; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .whale-class { font-size: 11px; color: #7aa8c4; margin-bottom: 6px; }
+  .whale-status { font-size: 11px; padding: 3px 8px; border-radius: 20px; display: inline-block; }
+  .whale-score { font-size: 12px; color: #7aa8c4; margin-top: 5px; }
+  .status-weak { background: rgba(232,75,74,0.2); color: #f09595; }
+  .status-ok { background: rgba(186,117,23,0.2); color: #FAC775; }
+  .status-good { background: rgba(29,158,117,0.2); color: #5DCAA5; }
+  .status-great { background: rgba(55,138,221,0.2); color: #85B7EB; }
+
+  /* ── INPUT ── */
+  .input-panel {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 20px 24px; margin-bottom: 24px;
+  }
+  .input-grid { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; align-items: end; margin-top: 14px; }
+  .input-group label { font-size: 12px; color: #7aa8c4; display: block; margin-bottom: 6px; }
+  .input-group input {
+    width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.07); color: #e8f4f8; font-size: 14px; outline: none;
+  }
+  .input-group input:focus { border-color: #1D9E75; }
+  .submit-btn {
+    padding: 9px 20px; border-radius: 8px; border: none;
+    background: #1D9E75; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap;
+  }
+  .submit-btn:hover { background: #17835f; }
+  .calc-preview { font-size: 12px; color: #7aa8c4; margin-top: 10px; }
+  .calc-preview strong { color: #5DCAA5; }
+  .success-msg { font-size: 13px; color: #1D9E75; margin-top: 8px; display: none; }
+
+  /* ── LEADERBOARD ── */
+  .leaderboard {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 20px 24px;
+  }
+  .lb-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-rank { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+  .lb-name { flex: 1; font-size: 14px; color: #e8f4f8; }
+  .lb-class { font-size: 11px; color: #7aa8c4; }
+  .lb-bar-wrap { flex: 2; background: rgba(255,255,255,0.07); border-radius: 4px; height: 8px; overflow: hidden; }
+  .lb-bar { height: 100%; border-radius: 4px; background: #1D9E75; transition: width 0.6s ease; }
+  .lb-score { font-size: 13px; font-weight: 500; color: #e8f4f8; min-width: 70px; text-align: right; }
+  .lb-me { background: rgba(29,158,117,0.08); margin: 0 -24px; padding: 10px 24px; }
+
+  @media (max-width: 700px) {
+    .stats-bar { grid-template-columns: repeat(2,1fr); }
+    .input-grid { grid-template-columns: 1fr 1fr; }
+    .whale-card { width: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div style="font-size:48px;margin-bottom:12px">🐋</div>
+    <h1>鲸鱼碳汇计划</h1>
+    <p>认养你的鲸鱼，守护我们的海洋</p>
+    <input type="text" id="login-name" placeholder="你的名字" maxlength="10">
+    <select id="login-class">
+      <option value="">选择班级</option>
+      <option>高一(1)班</option>
+      <option>高一(2)班</option>
+      <option>高一(3)班</option>
+      <option>高一(4)班</option>
+      <option>高一(5)班</option>
+      <option>高一(6)班</option>
+    </select>
+    <button onclick="doLogin()">认养我的鲸鱼 →</button>
+    <p style="font-size:11px;color:#4a7a94;margin-top:14px">首次登录自动创建你的鲸鱼</p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main-screen">
+  <div class="top-bar">
+    <div class="top-bar-left">🐋 鲸鱼碳汇计划</div>
+    <div class="top-bar-right">你好，<span id="nav-name"></span> · <span id="nav-class"></span></div>
+  </div>
+
+  <div class="content">
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">年级总减碳</div>
+        <div class="stat-value"><span id="stat-total">0</span><span class="stat-unit">g</span></div>
+        <div class="stat-sub" id="stat-trees">≈ 0 棵树/年</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">参与人数</div>
+        <div class="stat-value"><span id="stat-users">0</span><span class="stat-unit">人</span></div>
+        <div class="stat-sub">来自全年级</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">我的累计</div>
+        <div class="stat-value"><span id="stat-me">0</span><span class="stat-unit">g</span></div>
+        <div class="stat-sub" id="stat-me-status">继续加油！</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">我的鲸鱼</div>
+        <div class="stat-value" id="stat-whale-status" style="font-size:16px">虚弱中</div>
+        <div class="stat-sub" id="stat-whale-hint">每天录入数据帮助鲸鱼</div>
+      </div>
+    </div>
+
+    <!-- OCEAN -->
+    <div class="section-title">🌊 我们的海洋 — 实时状态</div>
+    <div class="ocean-container">
+      <div class="ocean-surface"></div>
+      <div class="whales-grid" id="whales-grid">
+        <div style="color:#7aa8c4;font-size:13px;padding:20px">等待同学加入...</div>
+      </div>
+    </div>
+
+    <!-- INPUT -->
+    <div class="input-panel">
+      <div class="section-title" style="margin-bottom:0">今日减碳录入</div>
+      <div class="input-grid">
+        <div class="input-group">
+          <label>🥤 少用塑料杯（个）</label>
+          <input type="number" id="inp-cup" min="0" max="20" value="0" oninput="updatePreview()">
+        </div>
+        <div class="input-group">
+          <label>📄 无纸化（张）</label>
+          <input type="number" id="inp-paper" min="0" max="100" value="0" oninput="updatePreview()">
+        </div>
+        <div class="input-group">
+          <label>🥢 自带餐具（次）</label>
+          <input type="number" id="inp-utensil" min="0" max="10" value="0" oninput="updatePreview()">
+        </div>
+        <button class="submit-btn" onclick="submitData()">提交今日数据</button>
+      </div>
+      <div class="calc-preview">
+        今日减碳：<strong id="preview-val">0g</strong>
+        <span id="preview-detail" style="color:#4a7a94"> （塑料杯 0g + 纸张 0g + 餐具 0g）</span>
+      </div>
+      <div class="success-msg" id="success-msg">✓ 提交成功！你的鲸鱼正在变健康～</div>
+    </div>
+
+    <!-- LEADERBOARD -->
+    <div class="leaderboard">
+      <div class="section-title" style="margin-bottom:14px">🏆 个人排行榜</div>
+      <div id="lb-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, get, onValue, runTransaction }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCyoNhC8zMiublTKYZ1jURHrdmn72mrXJA",
+    authDomain: "whale-whale-whale.firebaseapp.com",
+    databaseURL: "https://whale-whale-whale-default-rtdb.firebaseio.com",
+    projectId: "whale-whale-whale",
+    storageBucket: "whale-whale-whale.firebasestorage.app",
+    messagingSenderId: "642210363994",
+    appId: "1:642210363994:web:7896d528f902bff6c0f663"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  let ME = null;
+
+  /* ── WHALE APPEARANCE ── */
+  function whaleAppearance(score) {
+    if (score < 50)  return { emoji:'🐋', filter:'grayscale(80%) brightness(0.7)', status:'虚弱中', statusClass:'status-weak', hint:'多录入数据帮助鲸鱼！' };
+    if (score < 200) return { emoji:'🐋', filter:'grayscale(30%)', status:'苏醒中', statusClass:'status-ok', hint:'继续加油，鲸鱼在好转！' };
+    if (score < 500) return { emoji:'🐳', filter:'none', status:'活跃', statusClass:'status-good', hint:'鲸鱼很健康，继续保持！' };
+    return { emoji:'🐳', filter:'sepia(20%) hue-rotate(180deg)', status:'健康领航', statusClass:'status-great', hint:'你的鲸鱼在带领鱼群！' };
+  }
+
+  /* ── RENDER OCEAN ── */
+  function renderOcean(users) {
+    const grid = document.getElementById('whales-grid');
+    if (!users || Object.keys(users).length === 0) {
+      grid.innerHTML = '<div style="color:#7aa8c4;font-size:13px;padding:20px">等待同学加入...</div>';
+      return;
+    }
+    const sorted = Object.values(users).sort((a,b) => (b.score||0) - (a.score||0));
+    grid.innerHTML = sorted.map(u => {
+      const isMe = ME && u.name === ME.name && u.class === ME.class;
+      const wa = whaleAppearance(u.score || 0);
+      return `<div class="whale-card ${isMe ? 'is-me' : ''}">
+        <span class="whale-svg" style="filter:${wa.filter}">${wa.emoji}</span>
+        <div class="whale-name" title="${u.name}">${u.name}</div>
+        <div class="whale-class">${u.class}</div>
+        <div class="whale-status ${wa.statusClass}">${wa.status}</div>
+        <div class="whale-score">${(u.score||0).toLocaleString()} g</div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ── RENDER LEADERBOARD ── */
+  function renderLeaderboard(users) {
+    const lb = document.getElementById('lb-list');
+    if (!users || Object.keys(users).length === 0) { lb.innerHTML = '<div style="color:#7aa8c4;font-size:13px">暂无数据</div>'; return; }
+    const sorted = Object.values(users).sort((a,b) => (b.score||0) - (a.score||0));
+    const max = sorted[0].score || 1;
+    const rankColors = [
+      { bg:'#FAC775', color:'#633806' },
+      { bg:'#D3D1C7', color:'#444441' },
+      { bg:'#F5C4B3', color:'#712B13' },
+    ];
+    lb.innerHTML = sorted.map((u, i) => {
+      const isMe = ME && u.name === ME.name && u.class === ME.class;
+      const pct = Math.round((u.score||0) / max * 100);
+      const rc = i < 3 ? rankColors[i] : { bg:'rgba(255,255,255,0.08)', color:'#7aa8c4' };
+      const scoreKg = (u.score||0) >= 1000 ? ((u.score||0)/1000).toFixed(2)+'kg' : (u.score||0)+'g';
+      return `<div class="lb-row ${isMe ? 'lb-me' : ''}">
+        <div class="lb-rank" style="background:${rc.bg};color:${rc.color}">${i+1}</div>
+        <div style="flex:1;min-width:0">
+          <div class="lb-name">${u.name} ${isMe ? '<span style="font-size:11px;color:#1D9E75">· 我</span>' : ''}</div>
+          <div class="lb-class">${u.class}</div>
+        </div>
+        <div class="lb-bar-wrap"><div class="lb-bar" style="width:${pct}%"></div></div>
+        <div class="lb-score">${scoreKg}</div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ── UPDATE MY STATS ── */
+  function updateMyStats(users) {
+    if (!ME || !users) return;
+    const key = ME.name + '_' + ME.class.replace(/[()]/g,'');
+    const me = users[key];
+    if (!me) return;
+    const score = me.score || 0;
+    const wa = whaleAppearance(score);
+    document.getElementById('stat-me').textContent = score.toLocaleString();
+    document.getElementById('stat-whale-status').textContent = wa.status;
+    document.getElementById('stat-whale-hint').textContent = wa.hint;
+  }
+
+  /* ── UPDATE GLOBAL STATS ── */
+  function updateGlobalStats(users) {
+    if (!users) return;
+    const vals = Object.values(users);
+    const total = vals.reduce((s,u) => s + (u.score||0), 0);
+    document.getElementById('stat-total').textContent = total >= 1000 ? (total/1000).toFixed(1)+'k' : total;
+    document.getElementById('stat-users').textContent = vals.length;
+    const trees = (total / 21000).toFixed(1);
+    document.getElementById('stat-trees').textContent = `≈ ${trees} 棵树/年`;
+  }
+
+  /* ── LIVE LISTENER ── */
+  function startListening() {
+    const usersRef = ref(db, 'users');
+    onValue(usersRef, snap => {
+      const users = snap.val();
+      renderOcean(users);
+      renderLeaderboard(users);
+      updateMyStats(users);
+      updateGlobalStats(users);
+    });
+  }
+
+  /* ── LOGIN ── */
+  window.doLogin = async function() {
+    const name = document.getElementById('login-name').value.trim();
+    const cls  = document.getElementById('login-class').value;
+    if (!name) { alert('请输入你的名字'); return; }
+    if (!cls)  { alert('请选择班级'); return; }
+    ME = { name, class: cls };
+    const key = name + '_' + cls.replace(/[()]/g,'');
+    const userRef = ref(db, 'users/' + key);
+    const snap = await get(userRef);
+    if (!snap.exists()) {
+      await set(userRef, { name, class: cls, score: 0 });
+    }
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main-screen').style.display = 'block';
+    document.getElementById('nav-name').textContent = name;
+    document.getElementById('nav-class').textContent = cls;
+    startListening();
+  };
+
+  /* ── PREVIEW ── */
+  window.updatePreview = function() {
+    const cup     = parseInt(document.getElementById('inp-cup').value)     || 0;
+    const paper   = parseInt(document.getElementById('inp-paper').value)   || 0;
+    const utensil = parseInt(document.getElementById('inp-utensil').value) || 0;
+    const total   = cup * 90 + paper * 12 + utensil * 80;
+    const disp    = total >= 1000 ? (total/1000).toFixed(2)+'kg' : total+'g';
+    document.getElementById('preview-val').textContent = disp;
+    document.getElementById('preview-detail').textContent =
+      ` （塑料杯 ${cup*90}g + 纸张 ${paper*12}g + 餐具 ${utensil*80}g）`;
+  };
+
+  /* ── SUBMIT ── */
+  window.submitData = async function() {
+    if (!ME) return;
+    const cup     = parseInt(document.getElementById('inp-cup').value)     || 0;
+    const paper   = parseInt(document.getElementById('inp-paper').value)   || 0;
+    const utensil = parseInt(document.getElementById('inp-utensil').value) || 0;
+    const gained  = cup * 90 + paper * 12 + utensil * 80;
+    if (gained === 0) { alert('请至少填入一项数据'); return; }
+    const key = ME.name + '_' + ME.class.replace(/[()]/g,'');
+    const userRef = ref(db, 'users/' + key + '/score');
+    await runTransaction(userRef, current => (current || 0) + gained);
+    document.getElementById('inp-cup').value = 0;
+    document.getElementById('inp-paper').value = 0;
+    document.getElementById('inp-utensil').value = 0;
+    window.updatePreview();
+    const msg = document.getElementById('success-msg');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3000);
+  };
+</script>
+</body>
+</html>
