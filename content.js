@@ -6,9 +6,9 @@
 const WHALE_CONTENT = {
 
   weak: {
-    statusName: "虚弱中",
+    statusName: "weak",
     subtitle: "海水还很浑浊……",
-    shortDesc: "鲸鱼静静地漂浮在海面上，等待着改变。",
+    shortDesc: "只有枯骨在水中漂浮。",
     clickDesc: [
       "每一个塑料袋，都是它无法消化的重量。",
       "海水温度下降了，鲸鱼蜷缩在冰冷的洋流里。",
@@ -18,7 +18,7 @@ const WHALE_CONTENT = {
   },
 
   awake: {
-    statusName: "苏醒中",
+    statusName: "awake",
     subtitle: "感受到了一丝温暖",
     shortDesc: "鲸鱼慢慢睁开了眼睛，尾巴开始轻轻摆动。",
     clickDesc: [
@@ -30,7 +30,7 @@ const WHALE_CONTENT = {
   },
 
   active: {
-    statusName: "活跃",
+    statusName: "active",
     subtitle: "海面波光粼粼",
     shortDesc: "鲸鱼跃出水面，溅起了晶莹的水花。",
     clickDesc: [
@@ -42,7 +42,7 @@ const WHALE_CONTENT = {
   },
 
   great: {
-    statusName: "健康领航",
+    statusName: "great",
     subtitle: "深海充满了生机",
     shortDesc: "鲸鱼带着幼鲸，在清澈的海水里自由游弋。",
     clickDesc: [
