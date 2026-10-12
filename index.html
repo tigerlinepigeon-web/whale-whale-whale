@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>whale-whale-whale</title>
+<link rel="stylesheet" href="style.css">
+<script src="content.js"></script>
+</head>
+<body>
+
+<!-- ================= 登录页 ================= -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-title">whale-whale-whale</div>
+    <div class="login-sub">认养你的鲸鱼，守护我们的海洋</div>
+    <input type="text" id="login-name" placeholder="你的名字" maxlength="10">
+    <select id="login-class">
+      <option value="">选择班级</option>
+      <optgroup label="PIB">
+        <option>PIB 1</option><option>PIB 2</option><option>PIB 3</option><option>PIB 4</option>
+      </optgroup>
+      <optgroup label="IB1">
+        <option>IB1 1</option><option>IB1 2</option><option>IB1 3</option><option>IB1 4</option>
+      </optgroup>
+      <optgroup label="IB2">
+        <option>IB2 1</option><option>IB2 2</option><option>IB2 3</option><option>IB2 4</option>
+      </optgroup>
+      <option>无所属👻</option>
+    </select>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">认养我的鲸鱼 →</button>
+    <div class="login-msg" id="login-msg">首次登录会自动创建你的鲸鱼</div>
+  </div>
+</div>
+
+<!-- ================= 主界面 ================= -->
+<div id="main-screen">
+  <div class="app-wrap">
+
+    <!-- 左侧菜单 -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-title">whale-whale-whale</div>
+        <div class="sidebar-logo-sub">海洋碳汇观察笔记</div>
+      </div>
+      <div class="nav-items">
+        <div class="nav-item active" data-page="whale"><div class="nav-dot"></div>我的鲸鱼</div>
+        <div class="nav-item" data-page="rank"><div class="nav-dot"></div>年级排名</div>
+        <div class="nav-item" data-page="log"><div class="nav-dot"></div>今日录入</div>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-name" id="nav-name"></div>
+        <div class="user-class" id="nav-class"></div>
+      </div>
+    </div>
+
+    <div class="main-content">
+
+      <!-- 页面一：我的鲸鱼 -->
+      <div id="page-whale" class="page active">
+        <div class="whale-page">
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+          <div class="stamp-badge" id="w-badge">载入中</div>
+          <div class="whale-img-wrap" id="whale-wrap">
+            <img id="whale-frame-a" class="whale-img" alt="我的鲸鱼">
+            <img id="whale-frame-b" class="whale-img hidden" alt="">
+          </div>
+          <div class="whale-subtitle" id="w-subtitle"></div>
+          <div class="whale-short-desc" id="w-short-desc"></div>
+          <div class="whale-popup-text" id="w-popup-text">点击上方的鲸鱼……</div>
+          <div class="whale-progress">
+            <div class="progress-top">
+              <span class="progress-label">累计减碳</span>
+              <span class="progress-num" id="w-score">0g</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="w-progress"></div></div>
+            <div class="progress-next" id="w-next"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 页面二：年级排名 -->
+      <div id="page-rank" class="page">
+        <div class="inner-page">
+          <div class="page-title-hand">年级排名</div>
+          <div class="page-title-sub">每次有人提交，这里都会实时更新</div>
+          <div class="global-stat">
+            <div class="stat-card">
+              <div class="stat-label">年级总减碳</div>
+              <div class="stat-val" id="r-total">0g</div>
+              <div class="stat-note" id="r-trees"></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">参与人数</div>
+              <div class="stat-val" id="r-users">0</div>
+              <div class="stat-note">来自全年级</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">我的排名</div>
+              <div class="stat-val" id="r-my-rank">—</div>
+              <div class="stat-note" id="r-my-score"></div>
+            </div>
+          </div>
+          <div class="lb-wrap" id="lb-list"><div class="lb-empty">载入中…</div></div>
+        </div>
+      </div>
+
+      <!-- 页面三：今日录入 -->
+      <div id="page-log" class="page">
+        <div class="inner-page log-page">
+          <div class="page-title-hand">今日减碳录入</div>
+          <div class="page-title-sub">每天提交一次，你的鲸鱼会跟着变化</div>
+          <div class="log-card">
+            <div class="log-field">
+              <div class="log-label">少用的塑料杯（个）<span id="hint-cup"></span></div>
+              <input class="log-input" type="number" id="inp-cup" min="0" value="0" inputmode="numeric">
+            </div>
+            <div class="log-field">
+              <div class="log-label">少打印的纸（张）<span id="hint-paper"></span></div>
+              <input class="log-input" type="number" id="inp-paper" min="0" value="0" inputmode="numeric">
+            </div>
+            <div class="log-field">
+              <div class="log-label">自带餐具（次）<span id="hint-utensil"></span></div>
+              <input class="log-input" type="number" id="inp-utensil" min="0" value="0" inputmode="numeric">
+            </div>
+            <div class="log-preview">今日减碳 <strong id="preview-val">0g</strong> <span id="preview-detail"></span></div>
+          </div>
+          <button class="submit-btn" id="submit-btn" onclick="submitData()">提交今日数据</button>
+          <div class="log-msg" id="log-msg"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================
+   设置区：想改什么就改这里
+   ================================================ */
+const CONFIG = {
+  // 鲸鱼图片：文件和 index.html 放在同一层。只有一张图的状态就只写一个
+  images: {
+    weak:   ['weak.png'],
+    awake:  ['awake1.png', 'awake2.png'],
+    active: ['active1.png', 'active2.png'],
+    great:  ['great1.png', 'great2.png']
+  },
+
+  frameInterval: 5000,   // 两张差分图的切换间隔（毫秒），5000 = 5 秒
+
+  // 累计减碳达到多少克，进入对应状态（低于 awake 就是 weak）
+  thresholds: { awake: 50, active: 200, great: 500 },
+
+  // 每项的减碳系数（克 CO2e）
+  factors: { cup: 90, paper: 12, utensil: 80 },
+
+  // 每项每天最多能填多少
+  // 注意：改了 factors 或 maxPerItem，要同步改 Firebase 规则里的 1820
+  // （1820 = 10 × (90 + 12 + 80)，也就是一天最多能加的克数）
+  maxPerItem: 10
+};
+
+/* 如果 Firebase 没加载出来，点登录会显示这句，而不是没反应 */
+window.doLogin = function () {
+  const el = document.getElementById('login-msg');
+  el.textContent = '页面组件没加载出来。在国内需要能访问 Google 服务的网络（比如开着 VPN），然后刷新再试。';
+  el.className = 'login-msg error';
+};
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, update, onValue }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const db = getDatabase(initializeApp({
+  apiKey: "AIzaSyCyoNhC8zMiublTKYZ1jURHrdmn72mrXJA",
+  authDomain: "whale-whale-whale.firebaseapp.com",
+  databaseURL: "https://whale-whale-whale-default-rtdb.firebaseio.com",
+  projectId: "whale-whale-whale",
+  storageBucket: "whale-whale-whale.firebasestorage.app",
+  messagingSenderId: "642210363994",
+  appId: "1:642210363994:web:7896d528f902bff6c0f663"
+}));
+
+/* ── 小工具 ── */
+const $ = id => document.getElementById(id);
+const fmt = g => g >= 1000 ? (g / 1000).toFixed(2) + 'kg' : Math.round(g) + 'g';
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const makeKey = (name, cls) => name + '_' + cls.replace(/[()\s]/g, '');   // 和旧版一致，老数据能直接用
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+const withTimeout = (p, ms = 10000) =>
+  Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
+
+function explain(err) {
+  const m = String(err && err.message || err).toLowerCase();
+  if (m.includes('permission')) return '数据库拒绝了请求：Firebase 的规则可能过期了，或者这次提交超出了每日上限。';
+  if (m.includes('timeout')) return '连不上数据库。在国内需要能访问 Google 服务的网络（比如开着 VPN）。';
+  return '出错了：' + (err && err.message || err);
+}
+
+function stateFromScore(s) {
+  const t = CONFIG.thresholds;
+  if (s >= t.great) return 'great';
+  if (s >= t.active) return 'active';
+  if (s >= t.awake) return 'awake';
+  return 'weak';
+}
+
+let ME = null, myKey = '', currentState = null, animTimer = null;
+
+/* ── 鲸鱼差分动画 ── */
+function startAnim(state) {
+  if (state === currentState) return;   // 状态没变就不重启动画
+  currentState = state;
+  clearInterval(animTimer);
+  const frames = CONFIG.images[state];
+  const a = $('whale-frame-a'), b = $('whale-frame-b');
+  a.src = frames[0];
+  a.classList.remove('hidden');
+  b.classList.add('hidden');
+  if (frames.length < 2) return;
+  b.src = frames[1];
+  let showingA = true;
+  animTimer = setInterval(() => {
+    showingA = !showingA;
+    a.classList.toggle('hidden', !showingA);
+    b.classList.toggle('hidden', showingA);
+  }, CONFIG.frameInterval);
+}
+
+/* ── 点击鲸鱼：随机说一句 ── */
+$('whale-wrap').addEventListener('click', () => {
+  if (!currentState) return;
+  const lines = WHALE_CONTENT[currentState].clickDesc;
+  const el = $('w-popup-text');
+  el.style.opacity = '0';
+  setTimeout(() => {
+    el.textContent = lines[Math.floor(Math.random() * lines.length)];
+    el.style.opacity = '1';
+  }, 250);
+});
+
+/* ── 页面一 ── */
+function updateWhalePage(score) {
+  const state = stateFromScore(score);
+  const c = WHALE_CONTENT[state];
+  $('w-badge').textContent = c.statusName;
+  $('w-subtitle').textContent = c.subtitle;
+  $('w-short-desc').textContent = c.shortDesc;
+  $('w-score').textContent = fmt(score);
+
+  // 进度条：当前状态到下一个状态走了多少
+  const order = ['weak', 'awake', 'active', 'great'];
+  const start = { weak: 0, ...CONFIG.thresholds };
+  const i = order.indexOf(state);
+  if (i < order.length - 1) {
+    const next = order[i + 1];
+    const lo = start[state], hi = start[next];
+    $('w-progress').style.width = Math.round((score - lo) / (hi - lo) * 100) + '%';
+    $('w-next').textContent = `再减 ${fmt(hi - score)}，鲸鱼会进入「${WHALE_CONTENT[next].statusName}」`;
+  } else {
+    $('w-progress').style.width = '100%';
+    $('w-next').textContent = '已经是最健康的状态了';
+  }
+
+  if (state !== currentState) $('w-popup-text').textContent = '点击上方的鲸鱼……';
+  startAnim(state);
+}
+
+/* ── 页面二 ── */
+const RANK_NUMS = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+function updateRanking(users) {
+  const list = Object.entries(users)
+    .map(([k, u]) => ({ k, name: u.name || '?', cls: u.class || '', score: u.score || 0 }))
+    .sort((x, y) => y.score - x.score);
+  const total = list.reduce((s, u) => s + u.score, 0);
+  const max = (list[0] && list[0].score) || 1;
+
+  $('r-total').textContent = fmt(total);
+  $('r-trees').textContent = '≈ ' + (total / 21000).toFixed(2) + ' 棵树一年的吸碳量';
+  $('r-users').textContent = list.length + ' 人';
+
+  const myIdx = list.findIndex(u => u.k === myKey);
+  if (myIdx >= 0) {
+    $('r-my-rank').textContent = '第 ' + (myIdx + 1) + ' 名';
+    $('r-my-score').textContent = fmt(list[myIdx].score);
+  }
+
+  $('lb-list').innerHTML = list.length ? list.map((u, i) => {
+    const isMe = u.k === myKey;
+    return `<div class="lb-row ${isMe ? 'is-me' : ''}">
+      <div class="lb-rank">${RANK_NUMS[i] || i + 1}</div>
+      <img class="lb-thumb" src="${CONFIG.images[stateFromScore(u.score)][0]}" alt="">
+      <div class="lb-info">
+        <div class="lb-name">${esc(u.name)}${isMe ? '<span class="me-tag">· 我</span>' : ''}</div>
+        <div class="lb-class">${esc(u.cls)}</div>
+      </div>
+      <div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(u.score / max * 100)}%"></div></div>
+      <div class="lb-score">${fmt(u.score)}</div>
+    </div>`;
+  }).join('') : '<div class="lb-empty">还没有人加入</div>';
+}
+
+/* ── 页面三 ── */
+const ITEMS = ['cup', 'paper', 'utensil'];
+const UNITS = { cup: '个', paper: '张', utensil: '次' };
+ITEMS.forEach(it => {
+  $('hint-' + it).textContent = `每${UNITS[it]} ${CONFIG.factors[it]}g，最多 ${CONFIG.maxPerItem}${UNITS[it]}`;
+  $('inp-' + it).max = CONFIG.maxPerItem;
+  $('inp-' + it).addEventListener('input', updatePreview);
+});
+
+function readInputs() {
+  const v = {};
+  ITEMS.forEach(it => {
+    const n = parseInt($('inp-' + it).value, 10);
+    v[it] = Math.max(0, Math.min(CONFIG.maxPerItem, isNaN(n) ? 0 : n));   // 负数和超上限都会被拦住
+  });
+  v.total = ITEMS.reduce((s, it) => s + v[it] * CONFIG.factors[it], 0);
+  return v;
+}
+
+function updatePreview() {
+  const v = readInputs();
+  const f = CONFIG.factors;
+  $('preview-val').textContent = fmt(v.total);
+  $('preview-detail').textContent = `（杯 ${v.cup * f.cup}g + 纸 ${v.paper * f.paper}g + 餐具 ${v.utensil * f.utensil}g）`;
+}
+
+function logMsg(text, type) {
+  const el = $('log-msg');
+  el.textContent = text;
+  el.className = 'log-msg ' + type;
+}
+
+function lockSubmit() {
+  $('submit-btn').disabled = true;
+  $('submit-btn').textContent = '今天已经提交过了，明天再来';
+}
+
+window.submitData = async function () {
+  if (!ME) return;
+  const v = readInputs();
+  if (v.total === 0) return logMsg('至少填一项再提交', 'warn');
+  $('submit-btn').disabled = true;
+  try {
+    const userRef = ref(db, 'users/' + myKey);
+    const snap = await withTimeout(get(userRef));
+    if (!snap.exists()) throw new Error('你的记录不存在了，请刷新页面重新登录');
+    const u = snap.val();
+    if (u.lastDate === today()) { lockSubmit(); return logMsg('今天已经提交过了', 'warn'); }
+    // 每天一次的限制记在数据库里，换浏览器、清缓存也绕不过去
+    await withTimeout(update(userRef, { score: (u.score || 0) + v.total, lastDate: today() }));
+    ITEMS.forEach(it => $('inp-' + it).value = 0);
+    updatePreview();
+    lockSubmit();
+    logMsg(`提交成功，减碳 ${fmt(v.total)}。去看看你的鲸鱼吧`, 'ok');
+  } catch (err) {
+    $('submit-btn').disabled = false;
+    logMsg(explain(err), 'warn');
+  }
+};
+
+/* ── 实时监听所有人的数据 ── */
+function startListening() {
+  onValue(ref(db, 'users'), snap => {
+    const users = snap.val() || {};
+    const me = users[myKey];
+    if (me) {
+      updateWhalePage(me.score || 0);
+      if (me.lastDate === today()) lockSubmit();
+    }
+    updateRanking(users);
+  }, err => {
+    $('lb-list').innerHTML = `<div class="lb-empty">${esc(explain(err))}</div>`;
+  });
+}
+
+/* ── 菜单切换 ── */
+document.querySelectorAll('.nav-item').forEach(el => el.addEventListener('click', () => {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  $('page-' + el.dataset.page).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo(0, 0);
+}));
+
+/* ── 登录 ── */
+function loginMsg(text, isError) {
+  $('login-msg').textContent = text;
+  $('login-msg').className = 'login-msg' + (isError ? ' error' : '');
+}
+
+window.doLogin = async function () {
+  const name = $('login-name').value.trim();
+  const cls = $('login-class').value;
+  if (!name) return loginMsg('请输入你的名字', true);
+  if (/[.#$\[\]\/]/.test(name)) return loginMsg('名字里不能有 . # $ [ ] / 这些符号', true);
+  if (!cls) return loginMsg('请选择班级', true);
+
+  $('login-btn').disabled = true;
+  loginMsg('连接中…');
+  try {
+    const key = makeKey(name, cls);
+    const userRef = ref(db, 'users/' + key);
+    const snap = await withTimeout(get(userRef));
+    if (!snap.exists()) {
+      await withTimeout(set(userRef, { name, class: cls, score: 0, key }));
+    }
+    ME = { name, class: cls };
+    myKey = key;
+    try { localStorage.setItem('whale_last_login', JSON.stringify(ME)); } catch (e) {}
+    $('login-screen').style.display = 'none';
+    $('main-screen').style.display = 'block';
+    $('nav-name').textContent = name;
+    $('nav-class').textContent = cls;
+    updatePreview();
+    startListening();
+  } catch (err) {
+    $('login-btn').disabled = false;
+    loginMsg(explain(err), true);
+  }
+};
+
+$('login-name').addEventListener('keydown', e => { if (e.key === 'Enter') window.doLogin(); });
+
+/* 记住上次登录的名字和班级，下次自动填好 */
+try {
+  const last = JSON.parse(localStorage.getItem('whale_last_login') || 'null');
+  if (last) { $('login-name').value = last.name; $('login-class').value = last.class; }
+} catch (e) {}
+</script>
+</body>
+</html>
