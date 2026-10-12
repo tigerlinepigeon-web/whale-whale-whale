@@ -7,49 +7,49 @@ const WHALE_CONTENT = {
 
   weak: {
     statusName: "weak",
-    subtitle: "海水还很浑浊……",
-    shortDesc: "只有枯骨在水中漂浮。",
+    subtitle: "The water is still murky...",
+    shortDesc: "Only bones drift in the water.",
     clickDesc: [
-      "每一个塑料袋，都是它无法消化的重量。",
-      "海水温度下降了，鲸鱼蜷缩在冰冷的洋流里。",
-      "它还记得从前海水的颜色……",
-      "也许明天，会有人注意到它。"
+      "Every plastic bag is a weight it can never digest.",
+      "The water turned cold. The whale curls up in the icy current.",
+      "It still remembers what color the sea used to be...",
+      "Maybe tomorrow, someone will notice it."
     ]
   },
 
   awake: {
     statusName: "awake",
-    subtitle: "感受到了一丝温暖",
-    shortDesc: "鲸鱼慢慢睁开了眼睛，尾巴开始轻轻摆动。",
+    subtitle: "A little warmth returns",
+    shortDesc: "The whale slowly opens its eyes. Its tail begins to move.",
     clickDesc: [
-      "水温回升了一点点，鲸鱼感受到了变化。",
-      "它抬起头，看见了远处透进来的光。",
-      "每一张少打的纸，都让海水清澈了一点。",
-      "继续吧，它在等你。"
+      "The water is a little warmer. The whale can feel the change.",
+      "It lifts its head and sees light coming through from far away.",
+      "Every sheet you didn't print made the water a little clearer.",
+      "Keep going. It's waiting for you."
     ]
   },
 
   active: {
     statusName: "active",
-    subtitle: "海面波光粼粼",
-    shortDesc: "鲸鱼跃出水面，溅起了晶莹的水花。",
+    subtitle: "Light dances on the waves",
+    shortDesc: "The whale leaps out of the water and sends up a bright splash.",
     clickDesc: [
-      "它喷出了一道水柱，像是在庆祝。",
-      "鲸泵效应正在发生——它的每一次下潜，都在为海洋施肥。",
-      "周围的小鱼越来越多了。",
-      "你的努力，它都感受到了。"
+      "It blows a spout of water, like it's celebrating.",
+      "The whale pump is working. It feeds in the deep and brings nutrients up to the surface.",
+      "More and more small fish swim nearby.",
+      "It can feel everything you've done."
     ]
   },
 
   great: {
     statusName: "great",
-    subtitle: "深海充满了生机",
-    shortDesc: "鲸鱼带着幼鲸，在清澈的海水里自由游弋。",
+    subtitle: "The deep sea is full of life",
+    shortDesc: "The whale swims freely through clear water with its calf.",
     clickDesc: [
-      "一头健康的蓝鲸，一生能固定约33吨碳。",
-      "它带着幼鲸，把古老的迁徙路线传下去。",
-      "深海的珊瑚又开始生长了。",
-      "这片海，因为你而不同。"
+      "Over its lifetime, one great whale stores about 33 tons of CO₂.",
+      "It passes the old migration routes on to its calf.",
+      "Coral in the deep sea is starting to grow again.",
+      "This sea is different because of you."
     ]
   }
 
